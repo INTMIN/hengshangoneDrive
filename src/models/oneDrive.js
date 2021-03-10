@@ -1,4 +1,5 @@
 import {getListData} from "@/service/oneDrive";
+import {history} from 'umi'
 
 export default {
   namespace: 'oneDrive',
@@ -15,7 +16,14 @@ export default {
           payload: response
         })
       }
-    }
+    },
+    *goPage({payload}, { put}) {
+        yield put({
+          type: 'queryData',
+          payload: { data:[],next: null }
+        })
+       history.push(payload.url)
+    },
   },
   reducers: {
     queryData(state, {payload}) {

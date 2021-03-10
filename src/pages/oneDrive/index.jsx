@@ -1,20 +1,25 @@
-import {Button, Col, Form, Radio, Row, Select, Table} from "antd";
+import { Breadcrumb, Button, Col, Form, Radio, Row, Select, Table } from "antd";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "umi";
+import { connect, useDispatch,Link,history } from "umi";
 import styles from "./index.less";
-import SoundSwiper from "../../components/SoundSwiper";
+// import SoundSwiper from "../../components/SoundSwiper";
 
 const { Option } = Select;
 
-const TopicBrand = (props) => {
+
+const OneDriveList = (props) => {
+
   const [form] = Form.useForm();
   const [expendKeyArr, setExpendKeyArr] = useState([]);
+  const [listData,setListData] = useState([])
+  const [nextPage,setNextPage] = useState(props.oneDrive.next)
+
   // const [pagination, setPagination] = useState({
   //   page: 1,
   //   pageSize: 10,
   // });
   const [formValues, setFormValues] = useState({});
-  console.log("TopicBrand -> formValues", formValues);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,6 +29,14 @@ const TopicBrand = (props) => {
       // cleanup
     };
   }, [formValues]);
+
+  useEffect(()=>{
+    // console.log(props.oneDrive.data);
+    setNextPage(props.oneDrive.next)
+    if(listData!==props.oneDrive.data){
+      setListData([...listData,...props.oneDrive.data])
+    }
+  },[props.oneDrive])
   // useEffect(() => {
   //    console.log(expendKeyArr);
   // }, [expendKeyArr]);
@@ -38,9 +51,12 @@ const TopicBrand = (props) => {
     // } else {
     //   params.page = 1;
     // }
+    if(Object.keys(props.match.params).length >0 ){
+      params.path=props.match.params.path
+    }
 
     dispatch({
-      type: "topicbgm/fetchData",
+      type: "oneDrive/fetchData",
       payload: { ...params },
     });
   };
@@ -50,7 +66,25 @@ const TopicBrand = (props) => {
     setFormValues({ ...allValues });
   };
 
-  handleDownLoad
+  const searchNext=()=>{
+    dispatch({
+      type:'oneDrive/fetchData',
+      payload: { next:nextPage }
+    })
+  }
+
+  const returnMain=(url)=>{
+   // history.push('/oneDrive/list')
+    dispatch({
+      type:'oneDrive/goPage',
+      payload:{
+        url
+      }
+    })
+  }
+
+
+
 
   const show = (expanded, record) => {
     // console.log(expanded, record);
@@ -62,6 +96,11 @@ const TopicBrand = (props) => {
       setExpendKeyArr(expandedRows);
     }
   };
+
+  const handleClick=(e)=>{
+    console.log("-> e", e);
+
+  }
 
   // const handleChange = (pagination, filtersArg, sorter) => {
   //   const filters = Object.keys(filtersArg).reduce((obj, key) => {
@@ -80,51 +119,25 @@ const TopicBrand = (props) => {
   const columns = [
     { title: "Name", dataIndex: "name", width: 200, key: "name" },
     { title: "类型", dataIndex: "type", width: 200, key: "type" },
-    { title: "大小", dataIndex: "size", width: 400, key: "size" },
-    { title: "修改时间", dataIndex: "time", width: 400, key: "time" },
+    { title: "大小", dataIndex: "size", width: 400, key: "size",render: (value) =>(
+        value>0? <span>{(value/1024/1024).toFixed((2))} M</span>:'文件损坏'
+      )
+    },
+    { title: "修改时间", dataIndex: "time", width: 400, key: "time" ,render: (value) =>(
+        <span>{value.replace('T',' ').replace('Z','')} </span>
+      )},
     {
       title: "操作",
       width: 200,
       dataIndex: "",
       key: "x",
-      render: (_, record) => <a href={`https://1197052014571378.cn-beijing.fc.aliyuncs.com/2016-08-15/proxy/henshangOneDrive/OneDriveApi/download?id=${record.id}`} target="_blank" rel="noopener noreferrer">点击下载</a>,
+      render: (_, record) =>
+        record.type === "folder" && record.childCount > 0 ? <Button  onClick={()=>returnMain(`/oneDrive/list/${record.name}`)} >查看</Button>
+          : <a href={`https://1197052014571378.cn-beijing.fc.aliyuncs.com/2016-08-15/proxy/henshangOneDrive/OneDriveApi/download?id=${record.id}`} target="_blank" rel="noopener noreferrer">下载</a>,
     },
   ];
 
-  const data = [
-    {
-      key: 1,
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      description:
-        "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
-    },
-    {
-      key: 2,
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      description:
-        "My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.",
-    },
-    {
-      key: 3,
-      name: "Not Expandable",
-      age: 29,
-      address: "Jiangsu No. 1 Lake Park",
-      description: "This not expandable",
-    },
-    {
-      key: 4,
-      name: "Joe Black",
-      age: 32,
-      address: "Sidney No. 1 Lake Park",
-      description:
-        "My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.",
-    },
-  ];
-
+  const {loading} = props
   return (
     <div className={styles.wrap}>
       <div className={styles.content}>
@@ -136,24 +149,13 @@ const TopicBrand = (props) => {
         >
           <Row className={styles.formRow} justify="space-between">
             <Col>
-              <Form.Item name="sort">
-                <Radio.Group>
-                  <Radio.Button value="4">4</Radio.Button>
-                  <Radio.Button value="3">3</Radio.Button>
-                  <Radio.Button value="2">2</Radio.Button>
-                  <Radio.Button value="1">1</Radio.Button>
-                </Radio.Group>
-              </Form.Item>
-            </Col>
-            <Col>
-              <Form.Item name="time">
-                <Select style={{ width: 150 }}>
-                  <Option value="3">3</Option>
-                  <Option value="7">7</Option>
-                  <Option value="15">15</Option>
-                  <Option value="30">30</Option>
-                </Select>
-              </Form.Item>
+              <Breadcrumb onClick={handleClick}>
+                <Breadcrumb.Item>Home</Breadcrumb.Item>
+                <Breadcrumb.Item>
+                  <a href="">Application Center</a>
+                </Breadcrumb.Item>
+                <Breadcrumb.Item>An Application</Breadcrumb.Item>
+              </Breadcrumb>
             </Col>
           </Row>
         </Form>
@@ -161,22 +163,28 @@ const TopicBrand = (props) => {
           style={{
             overflow: "hidden",
           }}
+          rowKey={record=>record.id}
+          loading={loading}
           columns={columns}
           expandRowByClick
-          expandable={{
-            expandedRowRender: (record) => (
-              <div style={{ width: "calc(80vw - 32px)" }}>
-                <SoundSwiper />
-              </div>
-            ),
-            onExpand: show,
-            onExpandedRowsChange: rowChange,
-            expandedRowKeys: expendKeyArr,
-          }}
-          dataSource={data}
+          pagination={false}
+          // expandable={{
+          //   expandedRowRender: (record) => (
+          //     <div style={{ width: "calc(80vw - 32px)" }}>
+          //       <SoundSwiper />
+          //     </div>
+          //   ),
+          //   onExpand: show,
+          //   onExpandedRowsChange: rowChange,
+          //   expandedRowKeys: expendKeyArr,
+          // }}
+          dataSource={listData}
         />
       </div>
     </div>
-  );
+  )
 };
-export default TopicBrand;
+export default connect(({ oneDrive, loading })=> ({
+  oneDrive,
+  loading: loading.effects["oneDrive/fetchData"],
+}))(OneDriveList)

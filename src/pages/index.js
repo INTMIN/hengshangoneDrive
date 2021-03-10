@@ -1,6 +1,8 @@
 import styles from './index.css';
+import { history } from 'umi'
 
 export default function() {
+  history.push('/oneDrive/list')
   return (
     <div className={styles.normal}>
       <div className={styles.welcome} />

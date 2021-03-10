@@ -15,7 +15,7 @@ export default defineConfig({
   ignoreMomentLocale: true,
   // lessLoader: { javascriptEnabled: true },
   runtimePublicPath:true,
-  publicPath:'https://intmin.github.io/react-learn-file/go-react/react-hooks/dist/',
+  publicPath:'https://intmin.github.io/hengshangoneDrive/dist/',
   cssLoader: {},
   // nodeModulesTransform: {
   //   type: 'none',

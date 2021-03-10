@@ -2,5 +2,5 @@ import React from 'react';
 import {Spin} from 'antd';
 
 export default () => {
-  return <div><Spin/>加载中...</div>;
+  return <Spin><div style={{width:'90vw',height:'90vh'}} /></Spin>
 }
