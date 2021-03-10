@@ -1,5 +1,6 @@
 // ref: https://umijs.org/config/
 import { defineConfig } from 'umi';
+import routers from "./routers";
 
 export default defineConfig({
   base: '/',
@@ -25,36 +26,8 @@ export default defineConfig({
   //   imports: ['core-js/stable'],
   // },
 
-  routes: [
-    {
-      path: '/',
-      component: '../layouts/index',
-      routes: [{ path: '/', component: '../pages/index' }],
-    },
-  ],
+  routes: routers,
 
-  chainWebpack: function(config, { webpack }) {
-    config.merge({
-      optimization: {
-        minimize: true,
-        splitChunks: {
-          chunks: "all",
-          minSize: 30000,
-          minChunks: 3,
-          automaticNameDelimiter: ".",
-          cacheGroups: {
-            vendor: {
-              name: "vendors",
-              test({ resource }) {
-                return /[\\/]node_modules[\\/]/.test(resource);
-              },
-              priority: 10
-            }
-          }
-        }
-      }
-    });
-  },
 
   targets: {
     ie: 11,
