@@ -16,7 +16,7 @@ export default defineConfig({
   // lessLoader: { javascriptEnabled: true },
   cssLoader: {},
   runtimePublicPath: true,
-  publicPath: "https://intmin.github.io/hengshangoneDrive/",
+  publicPath: "https://intmin.github.io/hengshangoneDrive/dist/",
   alias: {
     src: require("path").resolve(__dirname, "./src")
   },
