@@ -20,10 +20,6 @@ export default defineConfig({
   alias: {
     src: require("path").resolve(__dirname, "./src")
   },
-  // polyfill: {
-  //   imports: ['core-js/stable'],
-  // },
-
   routes: routers,
 
   targets: {

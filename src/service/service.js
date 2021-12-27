@@ -2,7 +2,10 @@ import fetch from 'dva/fetch';
 
 
 export async function getHost() {
-  const response = await fetch(`../config.json`, {mode: 'cors'});
+  const response = await fetch(
+    `https://intmin.github.io/hengshangoneDrive/dist/config.json`,
+    { mode: "cors" }
+  );
   const config = await response.json();
   return config["host"]
 }
