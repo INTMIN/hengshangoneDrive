@@ -1,4 +1,4 @@
-import {getListData} from "@/service/oneDrive";
+import {getListData} from "src/service/oneDrive";
 import {history} from 'umi'
 
 export default {

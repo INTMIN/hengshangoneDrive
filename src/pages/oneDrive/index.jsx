@@ -1,6 +1,6 @@
 import { Breadcrumb, Button, Col, Form, Radio, Row, Select, Table } from "antd";
 import React, { useEffect, useState } from "react";
-import { connect, useDispatch,Link,history } from "umi";
+import { connect, useDispatch, Link, history } from "umi";
 import styles from "./index.less";
 // import SoundSwiper from "../../components/SoundSwiper";
 
@@ -11,8 +11,8 @@ const OneDriveList = (props) => {
 
   const [form] = Form.useForm();
   const [expendKeyArr, setExpendKeyArr] = useState([]);
-  const [listData,setListData] = useState([])
-  const [nextPage,setNextPage] = useState(props.oneDrive.next)
+  const [listData, setListData] = useState([])
+  const [nextPage, setNextPage] = useState(props.oneDrive.next)
 
   // const [pagination, setPagination] = useState({
   //   page: 1,
@@ -30,13 +30,13 @@ const OneDriveList = (props) => {
     };
   }, [formValues]);
 
-  useEffect(()=>{
+  useEffect(() => {
     // console.log(props.oneDrive.data);
     setNextPage(props.oneDrive.next)
-    if(listData!==props.oneDrive.data){
-      setListData([...listData,...props.oneDrive.data])
+    if (listData !== props.oneDrive.data) {
+      setListData([...listData, ...props.oneDrive.data])
     }
-  },[props.oneDrive])
+  }, [props.oneDrive])
   // useEffect(() => {
   //    console.log(expendKeyArr);
   // }, [expendKeyArr]);
@@ -51,8 +51,8 @@ const OneDriveList = (props) => {
     // } else {
     //   params.page = 1;
     // }
-    if(Object.keys(props.match.params).length >0 ){
-      params.path=props.match.params.path
+    if (Object.keys(props.match.params).length > 0) {
+      params.path = props.match.params.path
     }
 
     dispatch({
@@ -66,24 +66,22 @@ const OneDriveList = (props) => {
     setFormValues({ ...allValues });
   };
 
-  const searchNext=()=>{
+  const searchNext = () => {
     dispatch({
-      type:'oneDrive/fetchData',
-      payload: { next:nextPage }
+      type: 'oneDrive/fetchData',
+      payload: { next: nextPage }
     })
   }
 
-  const returnMain=(url)=>{
+  const returnMain = (url) => {
    // history.push('/oneDrive/list')
     dispatch({
-      type:'oneDrive/goPage',
-      payload:{
+      type: 'oneDrive/goPage',
+      payload: {
         url
       }
     })
   }
-
-
 
 
   const show = (expanded, record) => {
@@ -97,7 +95,7 @@ const OneDriveList = (props) => {
     }
   };
 
-  const handleClick=(e)=>{
+  const handleClick = (e) => {
     console.log("-> e", e);
 
   }
@@ -119,12 +117,12 @@ const OneDriveList = (props) => {
   const columns = [
     { title: "Name", dataIndex: "name", width: 200, key: "name" },
     { title: "类型", dataIndex: "type", width: 200, key: "type" },
-    { title: "大小", dataIndex: "size", width: 400, key: "size",render: (value) =>(
-        value>0? <span>{(value/1024/1024).toFixed((2))} M</span>:'文件损坏'
+    { title: "大小", dataIndex: "size", width: 400, key: "size", render: (value) => (
+        value > 0 ? <span>{(value / 1024 / 1024).toFixed((2))} M</span> : '文件损坏'
       )
     },
-    { title: "修改时间", dataIndex: "time", width: 400, key: "time" ,render: (value) =>(
-        <span>{value.replace('T',' ').replace('Z','')} </span>
+    { title: "修改时间", dataIndex: "time", width: 400, key: "time", render: (value) => (
+        <span>{value.replace('T', ' ').replace('Z', '')} </span>
       )},
     {
       title: "操作",
@@ -132,7 +130,7 @@ const OneDriveList = (props) => {
       dataIndex: "",
       key: "x",
       render: (_, record) =>
-        record.type === "folder" && record.childCount > 0 ? <Button  onClick={()=>returnMain(`/oneDrive/list/${record.name}`)} >查看</Button>
+        record.type === "folder" && record.childCount > 0 ? <Button  onClick={() => returnMain(`/oneDrive/list/${record.name}`)} >查看</Button>
           : <a href={`https://1197052014571378.cn-beijing.fc.aliyuncs.com/2016-08-15/proxy/henshangOneDrive/OneDriveApi/download?id=${record.id}`} target="_blank" rel="noopener noreferrer">下载</a>,
     },
   ];
@@ -163,7 +161,7 @@ const OneDriveList = (props) => {
           style={{
             overflow: "hidden",
           }}
-          rowKey={record=>record.id}
+          rowKey={record => record.id}
           loading={loading}
           columns={columns}
           expandRowByClick
@@ -184,7 +182,7 @@ const OneDriveList = (props) => {
     </div>
   )
 };
-export default connect(({ oneDrive, loading })=> ({
+export default connect(({ oneDrive, loading }) => ({
   oneDrive,
   loading: loading.effects["oneDrive/fetchData"],
 }))(OneDriveList)
