@@ -3,7 +3,7 @@ import { defineConfig } from 'umi';
 import routers from "./routers";
 
 export default defineConfig({
-  base: "/",
+  base: "/dist/",
   dva: {
     immer: true
   },
@@ -16,7 +16,7 @@ export default defineConfig({
   // lessLoader: { javascriptEnabled: true },
   cssLoader: {},
   runtimePublicPath: true,
-  publicPath: "https://intmin.github.io/hengshangoneDrive/dist/",
+  publicPath: "https://intmin.github.io/hengshangoneDrive/",
   alias: {
     src: require("path").resolve(__dirname, "./src")
   },
