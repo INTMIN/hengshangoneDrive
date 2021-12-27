@@ -3,24 +3,22 @@ import { defineConfig } from 'umi';
 import routers from "./routers";
 
 export default defineConfig({
-  base: '/',
+  base: "/",
   dva: {
-    immer: true,
+    immer: true
   },
   dynamicImport: {
-    loading: '@/loading',
+    loading: "@/loading"
   },
-  title: 'min react hooks',
+  title: "min react hooks",
   hash: true,
   ignoreMomentLocale: true,
   // lessLoader: { javascriptEnabled: true },
   cssLoader: {},
-  // nodeModulesTransform: {
-  //   type: 'none',
-  //   exclude: [], // 可解析src为项目src
-  // },
+  runtimePublicPath: true,
+  publicPath: "https://intmin.github.io/hengshangoneDrive/dist/",
   alias: {
-    src: require('path').resolve(__dirname, './src'),
+    src: require("path").resolve(__dirname, "./src")
   },
   // polyfill: {
   //   imports: ['core-js/stable'],
@@ -28,8 +26,7 @@ export default defineConfig({
 
   routes: routers,
 
-
   targets: {
-    ie: 11,
-  },
+    ie: 11
+  }
 });
