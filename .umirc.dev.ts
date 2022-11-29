@@ -3,7 +3,7 @@ import { defineConfig } from 'umi';
 import routers from "./routers";
 
 export default defineConfig({
-  base: '/',
+  base: '/dist/',
   dva: {
     immer: true,
   },
@@ -17,43 +17,11 @@ export default defineConfig({
   runtimePublicPath:true,
   publicPath:'https://intmin.github.io/hengshangoneDrive/dist/',
   cssLoader: {},
-  // nodeModulesTransform: {
-  //   type: 'none',
-  //   exclude: [], // 可解析src为项目src
-  // },
   alias: {
     src: require('path').resolve(__dirname, './src'),
   },
-  // polyfill: {
-  //   imports: ['core-js/stable'],
-  // },
 
   routes: routers,
-
-  chainWebpack: function(config ) {
-    config.merge({
-      optimization: {
-        minimize: true,
-        splitChunks: {
-          chunks: "all",
-          minSize: 30000,
-          minChunks: 3,
-          automaticNameDelimiter: ".",
-          cacheGroups: {
-            vendor: {
-              name: "vendors",
-              // @ts-ignore
-              test({ resource }) {
-                return /[\\/]node_modules[\\/]/.test(resource);
-              },
-              priority: 10
-            }
-          }
-        }
-      }
-    });
-  },
-
 
   targets: {
     ie: 11,
