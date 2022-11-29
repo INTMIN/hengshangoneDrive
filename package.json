@@ -12,13 +12,15 @@
   "dependencies": {
     "antd": "^4.5.2",
     "qs": "^6.9.1",
+    "base-64": "^1.0.0",
     "cross-env": "^7.0.2",
     "react-dom": "16.13.0",
     "react": "16.13.0",
     "react-id-swiper": "^4.0.0",
     "swiper": "^6.2.0",
     "umi": "^3.2.5",
-    "umi-request": "^1.3.4"
+    "umi-request": "^1.3.4",
+    "react-infinite-scroller": "^1.2.4"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.10.4",
@@ -33,7 +35,7 @@
     "eslint-plugin-react-hooks": "^4.0.8",
     "husky": "^4.2.5",
     "lint-staged": "^10.0.8",
-    "react-test-renderer": "^16.7.0",
+    "react-test-renderer": "16.13.0",
     "prettier": "^1.19.1"
   },
   "lint-staged": {
